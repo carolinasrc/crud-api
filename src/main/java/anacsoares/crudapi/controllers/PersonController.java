@@ -2,6 +2,8 @@ package anacsoares.crudapi.controllers;
 
 import anacsoares.crudapi.entities.PersonEntity;
 import anacsoares.crudapi.repositories.PersonRepository;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +13,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+@Api
 @RestController
 @RequestMapping(path = "/persons")
 public class PersonController {
@@ -23,12 +26,14 @@ public class PersonController {
         this.personRepository = personRepository;
     }
 
+    @ApiOperation("Cadastra pessoas individualmente.")
     @PostMapping
     public ResponseEntity<PersonEntity> save(@RequestBody PersonEntity personEntity) {
         personRepository.save(personEntity);
         return new ResponseEntity<>(personEntity, HttpStatus.OK);
     }
 
+    @ApiOperation("Consulta pessoas e retorna todas em uma lista.")
     @GetMapping
     public ResponseEntity<List<PersonEntity>> getAll() {
        List<PersonEntity> personEntities = new ArrayList<>();
@@ -37,6 +42,7 @@ public class PersonController {
 
     }
 
+    @ApiOperation("Consulta uma pessoa pelo id.")
     @GetMapping(path = "/{id}")
     public ResponseEntity<Optional<PersonEntity>> getById(@PathVariable Integer id) {
         Optional<PersonEntity> personEntity;
@@ -49,6 +55,7 @@ public class PersonController {
         }
     }
 
+    @ApiOperation("Deleta uma pessoa pelo id.")
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Optional<PersonEntity>> deleteById(@PathVariable Integer id) {
         try {
@@ -59,6 +66,7 @@ public class PersonController {
         }
     }
 
+    @ApiOperation("Atualiza dados de uma pessoa.")
     @PutMapping(value = "/{id}")
     public ResponseEntity<PersonEntity> update(@PathVariable Integer id, @RequestBody PersonEntity newPersonEntity) {
         return personRepository.findById(id)
